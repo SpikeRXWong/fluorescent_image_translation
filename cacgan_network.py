@@ -247,7 +247,8 @@ class Generator(nn.Module):
                 out["image"] = (out["image"] + 1) * img_mask.round() - 1
             # print(mask.shape)
             # out["mask"] = mask.unsqueeze(2)
-            # return out, mask              
+            # return out, mask   
+            # show I keep this
         return out
 
     def regularization(self, x):
