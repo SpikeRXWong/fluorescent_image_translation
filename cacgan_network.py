@@ -205,8 +205,7 @@ class Generator(nn.Module):
         d = []
         for layer in self.down:
             d.append(layer(d[-1] if len(d) != 0 else x))
-        # for ids,ds in enumerate(d):
-        #     print(ids,":",ds.shape)
+
         mid = self.midblock(d[-1]) + d[-1]
         
         if self.has_mask:
@@ -227,15 +226,7 @@ class Generator(nn.Module):
                 p = layer(mid if i == 0 else torch.cat([p, d[-i-1]], dim=1))
         
         out = {"image": self.final(p)}
-        # if self.has_mask:
-        #     out["mask"] = self.final_mask(m).unsqueeze(2)
-        #     if self.training:
-        #         mask = mean_calculater(out["mask"], dim = 1, split = True, resize = False)
-        #     else:
-        #         mask = median_calculater(out["mask"], dim = 1, split = True, resize = False)
-        #     # print(mask.shape)
-        #     out["image"] = (out["image"] + 1) * mask - 1
-        #     # return out, mask
+
         if self.has_mask:
             mask = self.final_mask(m)
             out["mask"] = mask.unsqueeze(2)
@@ -244,10 +235,7 @@ class Generator(nn.Module):
             if self.training:
                 out["image"] = (out["image"] + 1) * img_mask - 1
             else:
-                out["image"] = (out["image"] + 1) * img_mask.round() - 1
-            # print(mask.shape)
-            # out["mask"] = mask.unsqueeze(2)
-            # return out, mask              
+                out["image"] = (out["image"] + 1) * img_mask.round() - 1        
         return out
 
     def regularization(self, x):
