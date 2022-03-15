@@ -451,6 +451,30 @@ def test_model_performance(model_G, dataloader, folder, model_detail, device):
             mask_gt = data["mask"].repeat(1,3,1,1) -1
             image = torch.cat([image, mask_gt, mask_show], dim = 0)
         
+        for idxx in range(len(y_gt)):
+            savename = os.path.join(folder, "brightfield_{}_{}_{}_error.png".format(model_detail, idx, idxx+1))
+            save_image(x[idxx, c, ...], savename, nrow=1, padding=0, normalize=True, value_range=(-1,1))
+            
+            savename = os.path.join(folder, "fluorescent_gt_{}_{}_{}.png".format(model_detail, idx, idxx + 1))
+            save_image(y_gt[idxx].max(dim=0)[0], savename, nrow=1, padding=0, normalize=True, value_range=(-1,1))
+                
+            savename = os.path.join(folder, "fluorescent_tl_{}_{}_{}.png".format(model_detail, idx, idxx + 1))
+            save_image(y_gent[idxx].max(dim=0)[0], savename, nrow=1, padding=0, normalize=True, value_range=(-1,1))
+                
+            if y_gt.shape[1] == 2:
+                savename = os.path.join(folder, "fluorescent_gt_{}_{}_{}_color.png".format(model_detail, idx, idxx + 1))
+                save_image(y_show[idxx], savename, nrow=1, padding=0, normalize=True, value_range=(-1,1))
+            
+                savename = os.path.join(folder, "fluorescent_tl_{}_{}_{}_color.png".format(model_detail, idx, idxx + 1))
+                save_image(y_gent_show[idxx], savename, nrow=1, padding=0, normalize=True, value_range=(-1,1))
+            
+            if "mask" in out.keys():
+                savename = os.path.join(folder, "mask_gt_{}_{}_{}.png".format(model_detail, idx, idxx + 1))
+                save_image(mask_gt[idxx, 0, ...].float(), savename, nrow=1, padding=0, normalize=True, value_range=(-1,1))
+                
+                savename = os.path.join(folder, "mask_tl_{}_{}_{}.png".format(model_detail, idx, idxx + 1))
+                save_image(mask_show[idxx, 0, ...].float(), savename, nrow=1, padding=0, normalize=True, value_range=(-1,1)) 
+        
         savename = os.path.join(folder, "Test_image_{}_{}.png".format(model_detail, idx))
         save_image(image, savename, nrow=4, padding = 10, normalize=True, value_range=(-1,1), pad_value = 1)
         
