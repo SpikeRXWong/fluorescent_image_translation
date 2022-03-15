@@ -438,28 +438,34 @@ def test_model_performance(model_G, dataloader, folder, model_detail, device):
             
         c = x.shape[1]//2
         if y_gt.shape[1] == 2:
-            y_show = torch.cat([y_gt, -torch.ones_like(y_gt[:,:1,:,:])],dim=1)
-            y_gent_show = torch.cat([y_gent, -torch.ones_like(y_gent[:,:1,:,:])], dim=1)
+            y_show = torch.cat([y_gt, y_gt[:,:1, ...]], dim=1)
+            y_gent_show = torch.cat([y_gent, y_gent[:,:1, ...]], dim=1)
         else:
-            y_show = y_gt.max(dim=1,keepdim=True)[0].repeat(1,3,1,1)
-            y_gent_show = y_gent.max(dim=1, keepdim=True)[0].repeat(1,3,1,1)
-            
-        error_map = error_map_func(y_gent, y_gt)
-        image = torch.cat([x[:, c:c+1, ...].repeat(1,3,1,1), y_show, y_gent_show, error_map], dim = 0)
-        del x, y_gt, y_gent, y_show, y_gent_show, error_map
+            y_show = y_gt.repeat(1,3,1,1)
+            y_gent_show = y_gent.repeat(1,3,1,1)  
+        
+        image = torch.cat([x[:, c:c+1, ...].repeat(1,3,1,1), y_show, y_gent_show], dim = 0)
         
         if "mask" in out.keys():
             mask_show = median_calculater(mask_gent, dim=1, soft_max = True, resize = True, value_range = (-1,1)).repeat(1,3,1,1)
             mask_gt = data["mask"].repeat(1,3,1,1) -1
             image = torch.cat([image, mask_gt, mask_show], dim = 0)
-            del mask_gt, mask_gent
         
-        image = image.to("cpu")
         savename = os.path.join(folder, "Test_image_{}_{}.png".format(model_detail, idx))
         save_image(image, savename, nrow=4, padding = 10, normalize=True, value_range=(-1,1), pad_value = 1)
         
-        del out
+        error_map = error_map_func(y_gent, y_gt)
         
+        image = torch.cat([image, error_map], dim = 0)
+        
+        # image = image.to("cpu")
+        savename = os.path.join(folder, "Test_image_{}_{}_error.png".format(model_detail, idx))
+        save_image(image, savename, nrow=4, padding = 10, normalize=True, value_range=(-1,1), pad_value = 1)
+        
+        if "mask" in out.keys():
+            del mask_gent, mask_gt, mask_show
+        del x, y_gt, y_gent, y_show, y_gent_show, out
+
     for key in Test:
         Test[key] = torch.cat(Test[key], dim=0)
         print("{} : {:.4f} ({:.4f} - {:.4f})".format(key, Test[key].mean(), Test[key].min(), Test[key].max()))
