@@ -476,7 +476,7 @@ def test_model_performance(model_G, dataloader, folder, model_detail, device):
                 save_image(mask_show[idxx, 0, ...].float(), savename, nrow=1, padding=0, normalize=True, value_range=(-1,1)) 
         
         savename = os.path.join(folder, "Test_image_{}_{}.png".format(model_detail, idx))
-        save_image(image, savename, nrow=4, padding = 10, normalize=True, value_range=(-1,1), pad_value = 1)
+        save_image(image, savename, nrow=len(y_gt), padding = 10, normalize=True, value_range=(-1,1), pad_value = 1)
         
         error_map = error_map_func(y_gent, y_gt)
         
