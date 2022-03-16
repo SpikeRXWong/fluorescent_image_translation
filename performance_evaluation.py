@@ -140,35 +140,35 @@ def main(args):
             error_map = error_map_func(y_gent, y_gt)
             
             for idxx in range(len(y_gt)):
-                savename = os.path.join(save_folder, "brightfield_{}_{}_{}.png".format(os.environ['SLURM_JOBID'], idx, idxx + 1))
+                savename = os.path.join(save_folder, "brightfield_{}_{}_{}.png".format(sn, idx, idxx + 1))
                 save_image(x[idxx, c, ...], savename, nrow=1, padding=0, normalize=True, value_range=(-1,1))
                 
-                savename = os.path.join(save_folder, "fluorescent_gt_{}_{}_{}.png".format(os.environ['SLURM_JOBID'], idx, idxx + 1))
+                savename = os.path.join(save_folder, "fluorescent_gt_{}_{}_{}.png".format(sn, idx, idxx + 1))
                 save_image(y_gt[idxx].max(dim=0)[0], savename, nrow=1, padding=0, normalize=True, value_range=(-1,1))
                 
-                savename = os.path.join(save_folder, "fluorescent_tl_{}_{}_{}.png".format(os.environ['SLURM_JOBID'], idx, idxx + 1))
+                savename = os.path.join(save_folder, "fluorescent_tl_{}_{}_{}.png".format(sn, idx, idxx + 1))
                 save_image(y_gent[idxx].max(dim=0)[0], savename, nrow=1, padding=0, normalize=True, value_range=(-1,1))
                 
                 if y_gt.shape[1] == 2:
-                    savename = os.path.join(save_folder, "fluorescent_gt_{}_{}_{}_color.png".format(os.environ['SLURM_JOBID'], idx, idxx + 1))
+                    savename = os.path.join(save_folder, "fluorescent_gt_{}_{}_{}_color.png".format(sn, idx, idxx + 1))
                     save_image(y_show[idxx], savename, nrow=1, padding=0, normalize=True, value_range=(-1,1))
                 
-                    savename = os.path.join(save_folder, "fluorescent_tl_{}_{}_{}_color.png".format(os.environ['SLURM_JOBID'], idx, idxx + 1))
+                    savename = os.path.join(save_folder, "fluorescent_tl_{}_{}_{}_color.png".format(sn, idx, idxx + 1))
                     save_image(y_gent_show[idxx], savename, nrow=1, padding=0, normalize=True, value_range=(-1,1))
                 
                 if "mask" in out.keys():
-                    savename = os.path.join(save_folder, "mask_gt_{}_{}_{}.png".format(os.environ['SLURM_JOBID'], idx, idxx + 1))
+                    savename = os.path.join(save_folder, "mask_gt_{}_{}_{}.png".format(sn, idx, idxx + 1))
                     save_image(mask_gt[idxx, 0, ...].float(), savename, nrow=1, padding=0, normalize=True, value_range=(-1,1))
                     
-                    savename = os.path.join(save_folder, "mask_tl_{}_{}_{}.png".format(os.environ['SLURM_JOBID'], idx, idxx + 1))
+                    savename = os.path.join(save_folder, "mask_tl_{}_{}_{}.png".format(sn, idx, idxx + 1))
                     save_image(mask_show[idxx, 0, ...].float(), savename, nrow=1, padding=0, normalize=True, value_range=(-1,1))           
             
             # image = image.to("cpu")
-            savename = os.path.join(save_folder, "Output_image_{}_{}_{}.png".format(os.environ['SLURM_JOBID'], sn, idx))
+            savename = os.path.join(save_folder, "Output_image_{}_{}_{}.png".format(sn, idx, idxx + 1))
             save_image(image, savename, nrow=args.batch_size, padding = 10, normalize=True, value_range=(-1,1), pad_value = 1)
             
             image = torch.cat([image, error_map], dim = 0)
-            savename = os.path.join(save_folder, "Output_image_{}_{}_{}_error.png".format(os.environ['SLURM_JOBID'], sn, idx))
+            savename = os.path.join(save_folder, "Output_image_{}_{}_{}_error.png".format(sn, idx, idxx + 1))
             save_image(image, savename, nrow=args.batch_size, padding = 10, normalize=True, value_range=(-1,1), pad_value = 1)
             
             if "mask" in out.keys():
