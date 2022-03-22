@@ -105,20 +105,20 @@ class DBCImageDataset(Dataset):
     
     def slice_select(self, x, num):
         assert num in list(range(1,14))
-        ls = []
-        if num == 1:
-            ls.append(6)
-        else:
-            d = 12 / (num - 1)
-            s = 0
-            while s <= 12:
-                ls.append(int(round(s)))
-                s += d
-        return x[ls, ...]
-        # sta = 6 - num//2
-        # end = sta + num 
-        # x = x[..., sta : end]
-        # return x
+        # ls = []
+        # if num == 1:
+        #     ls.append(6)
+        # else:
+        #     d = 12 / (num - 1)
+        #     s = 0
+        #     while s <= 12:
+        #         ls.append(int(round(s)))
+        #         s += d
+        # return x[ls, ...]
+        sta = 6 - num//2
+        end = sta + num 
+        # x = x[sta : end]
+        return x[sta : end, ...]
     
     def __len__(self):
         return len(os.listdir(self.path))
