@@ -19,15 +19,20 @@ def snconvtranspose2d(in_channels, out_channels, kernel_size, stride=1, padding=
                                             groups=groups, bias=bias, dilation=dilation, padding_mode=padding_mode))
 
 class Self_Attention(nn.Module):
-    """
-    Self_Attention network based on Self-Attention Generative Adversarial Networks
-    
-    in_channels: number of channels of input
-    hidden_scale: k in the paper, reduce number of channel to Ch/k, where k = 1,2,4,8, defaut 8
-    use_sn: whether use Spectral Normalization, default True
-
-    """
     def __init__(self, in_channels, hidden_scale = 8, use_sn = True):
+        """
+        Self_Attention module for SACGAN and Discriminator
+
+        Parameters
+        ----------
+        in_channels : int
+            number of channels of input feature maps.
+        hidden_scale : int, optional
+            parameter for diving in_channels, input feature maps rescale to in_channel/hidden_scale. The default is 8.
+        use_sn : bool, optional
+            whether to use spectral normalization. The default is True.
+            
+        """
         super(Self_Attention, self).__init__()
         
         conv2d = snconv2d if use_sn else nn.Conv2d
@@ -45,13 +50,13 @@ class Self_Attention(nn.Module):
             
     def forward(self, x):
         """
-        Parameters
+        Input
         ----------
-        x : input feature maps, size Bs * Ch * H *W
+        x :  Bs * Ch * H *W
 
         Returns
         -------
-        residual output: size Bs * Ch * H * W
+        output: size Bs * Ch * H * W
         
         """       
         bs, _, H, W = x.size()
@@ -191,6 +196,23 @@ class Cross_Attention_bilateral(nn.Module):
 
 class Cross_Attention(nn.Module):
     def __init__(self, in_channels, by_pass=False, bilateral = False, hidden_scale = 8, use_sn = True):
+        """
+        cross-attetnion module inserted between image and mask generation path to exchange the long distance spacial dependancies
+
+        Parameters
+        ----------
+        in_channels : int
+            number of channels of input feature maps.
+        by_pass : bool, optional
+            whether apply attetnion calculation for mask generation. The default is False.
+        bilateral : bool, optional
+            whether concatenate cross calculation result to both self-attention outputs. The default is False.
+        hidden_scale : in, optional
+            parameter for diving in_channel to rescale the hidden layer with attention calculation. The default is 8.
+        use_sn : bool, optional
+            whether use spectral normaliazation. The default is True.
+
+        """
         super(Cross_Attention, self).__init__()
         
         conv2d = snconv2d if use_sn else nn.Conv2d 
@@ -224,6 +246,19 @@ class Cross_Attention(nn.Module):
                 self.sigma = nn.Parameter(torch.zeros(1))
         
     def forward(self, x, y):
+        """
+        Inputs
+        ----------
+        x : Tensor Bs * Ch * W * H
+            feature maps form image generation path.
+        y : Tensor Bs * Ch * W * H
+            feature maps from mask generation path.
+
+        Outputs
+        -------
+        Tensor Bs * Ch * W *H.
+
+        """
         assert x.size() == y.size()
         bs, _, H, W = x.size()
         

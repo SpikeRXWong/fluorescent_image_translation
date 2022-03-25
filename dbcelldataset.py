@@ -17,6 +17,24 @@ except ImportError:
     from albumentations.pytorch import ToTensorV2 as ToTensor
 
 def get_transforms(img_size, scale_range, version):
+    """
+    operation applied on dataset for augmentation 
+
+    Parameters
+    ----------
+    img_size : int
+        output image size.
+    scale_range : float
+        square value of the ratio of crop image to raw image.
+    version : str
+        purpose of the dataset.
+
+    Returns
+    -------
+    list_trfms : albumentations.Compose
+        augmentation operation on image.
+
+    """
     assert img_size in [128, 256]
     
     item_list = []
@@ -37,7 +55,34 @@ def get_transforms(img_size, scale_range, version):
     return list_trfms  
 
 class DBCImageDataset(Dataset):
-    def __init__(self, path = None, output_type = 1, num_slice = 5, has_mask = True, img_size = 128, scale_range = None, version = "test"):
+    def __init__(self, path = None, output_type = 1, num_slice = 13, has_mask = True, img_size = 128, scale_range = None, version = "test"):
+        """
+        Dataset preparasion
+
+        Parameters
+        ----------
+        path : str
+            dataset store path.
+        output_type : int, optional
+            number of output channels of fluorescent images. The default is 1.
+        num_slice : int, optional
+            number of image slices of bright-field image stack. The default is 13.
+        has_mask : bool, optional
+            whether has mask generation path for the training model. The default is True.
+        img_size : int, optional
+            image width and height. The default is 128.
+        scale_range : float, optional
+            square value of ratio of the image size used in the model to size of raw images. If None ratio will be set to 0.25.
+        version : str, optional
+            purpose of dataset. The default is "test".
+            
+        Returns
+        -------
+        out : torch.utils.data.Dataset
+            if has_mask is False, output brightfiled images and fluorescent images.
+            else, output brightfiled images, fluorescent images, mask (classification), weights (calculated from mask used for EntropyCrossLoss calculation)
+
+        """
         if path is None:
             path = 'DBCellfolder'
         self.path = path
@@ -105,20 +150,20 @@ class DBCImageDataset(Dataset):
     
     def slice_select(self, x, num):
         assert num in list(range(1,14))
-        # ls = []
-        # if num == 1:
-        #     ls.append(6)
-        # else:
-        #     d = 12 / (num - 1)
-        #     s = 0
-        #     while s <= 12:
-        #         ls.append(int(round(s)))
-        #         s += d
-        # return x[ls, ...]
-        sta = 6 - num//2
-        end = sta + num 
-        # x = x[sta : end]
-        return x[sta : end, ...]
+        ls = []
+        if num == 1:
+            ls.append(6)
+        else:
+            d = 12 / (num - 1)
+            s = 0
+            while s <= 12:
+                ls.append(int(round(s)))
+                s += d
+        return x[ls, ...]
+        # sta = 6 - num//2
+        # end = sta + num 
+        # # # x = x[sta : end]
+        # return x[sta : end, ...]
     
     def __len__(self):
         return len(os.listdir(self.path))
