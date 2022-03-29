@@ -225,7 +225,7 @@ class Cross_Attention(nn.Module):
         self.conv_g_1 = conv2d(in_channels = in_channels, out_channels = in_channels//hidden_scale, kernel_size = 1)
         self.conv_h_1 = conv2d(in_channels = in_channels, out_channels = in_channels//hidden_scale, kernel_size = 1)
         self.conv_v_11 = conv2d(in_channels = in_channels//hidden_scale, out_channels = in_channels, kernel_size = 1)
-        self.conv_v_12 = conv2d(in_channels = in_channels//hidden_scale, out_channels = in_channels, kernel_size = 1)
+        self.conv_v_21 = conv2d(in_channels = in_channels//hidden_scale, out_channels = in_channels, kernel_size = 1)
         
         if not by_pass:
             self.conv_f_2 = conv2d(in_channels = in_channels, out_channels = in_channels//hidden_scale, kernel_size = 1)
@@ -233,7 +233,7 @@ class Cross_Attention(nn.Module):
         self.conv_h_2 = conv2d(in_channels = in_channels, out_channels = in_channels//hidden_scale, kernel_size = 1)
         if not by_pass:
             if self.bilateral:
-                self.conv_v_21 = conv2d(in_channels = in_channels//hidden_scale, out_channels = in_channels, kernel_size = 1)
+                self.conv_v_12 = conv2d(in_channels = in_channels//hidden_scale, out_channels = in_channels, kernel_size = 1)
             self.conv_v_22 = conv2d(in_channels = in_channels//hidden_scale, out_channels = in_channels, kernel_size = 1)
         
         self.softmax = nn.Softmax(dim = -1)
