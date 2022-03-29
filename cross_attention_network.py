@@ -299,7 +299,7 @@ class Cross_Attention(nn.Module):
             return x
         else:
 #             y = y + (self.conv_o_2(torch.cat([v_12, v_22], dim = 1)) if self.bilateral else self.sigma * v_22)
-            y = y + self.gamma * v_12 + self.sigma * v_22 if self.bilateral else self.sigma * v_22) 
+            y = y + self.gamma * v_12 + self.sigma * v_22 if self.bilateral else self.sigma * v_22
             return x, y     
         
         
