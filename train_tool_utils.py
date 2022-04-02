@@ -434,6 +434,7 @@ def test_model_performance(model_G, dataloader, folder, model_detail, device):
         Test["SSIM"].append(compute_ssim(y_gt, y_gent, size_average = False))
 
         if "mask" in out.keys():
+            mask = data["mask"].to(device)
             mask_gent = out["mask"]
             
         c = x.shape[1]//2
@@ -448,7 +449,7 @@ def test_model_performance(model_G, dataloader, folder, model_detail, device):
         
         if "mask" in out.keys():
             mask_show = median_calculater(mask_gent, dim=1, soft_max = True, resize = True, value_range = (-1,1)).repeat(1,3,1,1)
-            mask_gt = data["mask"].repeat(1,3,1,1) -1
+            mask_gt = mask.repeat(1,3,1,1) -1
             image = torch.cat([image, mask_gt, mask_show], dim = 0)
         
         for idxx in range(len(y_gt)):
@@ -487,7 +488,7 @@ def test_model_performance(model_G, dataloader, folder, model_detail, device):
         save_image(image, savename, nrow=4, padding = 10, normalize=True, value_range=(-1,1), pad_value = 1)
         
         if "mask" in out.keys():
-            del mask_gent, mask_gt, mask_show
+            del mask, mask_gent, mask_gt, mask_show
         del x, y_gt, y_gent, y_show, y_gent_show, out
 
     for key in Test:
