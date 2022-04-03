@@ -291,7 +291,10 @@ def main(args):
 
     test_dataset = ImageDataset(path = args.test_path, output_type = args.out_slice, num_slice = args.num_slice, has_mask = args.has_mask, img_size = 256, scale_range = None, version = "test")
     
-    test_dataloader = DataLoader(test_dataset, batch_size = 4, shuffle = False, num_workers = 4 if args.device == 'cpu' else 0)
+    try:
+        test_dataloader = DataLoader(test_dataset, batch_size = 4, shuffle = False, num_workers = 4 if args.device == 'cpu' else 0)
+    except RuntimeError:
+        test_dataloader = DataLoader(test_dataset, batch_size = 1, shuffle = False, num_workers = 1 if args.device == 'cpu' else 0)
     
     print("\n"+"*"*20)
     print("Performance on Test dataset for {} is ...".format(model_detail))
