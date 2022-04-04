@@ -227,29 +227,32 @@ class Cross_Attention(nn.Module):
         self.conv_v_11 = conv2d(in_channels = in_channels//hidden_scale, out_channels = in_channels, kernel_size = 1)
         self.conv_v_21 = conv2d(in_channels = in_channels//hidden_scale, out_channels = in_channels, kernel_size = 1)
         
-        if not by_pass:
-            self.conv_f_2 = conv2d(in_channels = in_channels, out_channels = in_channels//hidden_scale, kernel_size = 1)
+#         if not by_pass:
+        self.conv_f_2 = conv2d(in_channels = in_channels, out_channels = in_channels//hidden_scale, kernel_size = 1)
         self.conv_g_2 = conv2d(in_channels = in_channels, out_channels = in_channels//hidden_scale, kernel_size = 1)
         self.conv_h_2 = conv2d(in_channels = in_channels, out_channels = in_channels//hidden_scale, kernel_size = 1)
+        self.conv_v_12 = conv2d(in_channels = in_channels//hidden_scale, out_channels = in_channels, kernel_size = 1)
         if not by_pass:
-            if self.bilateral:
-                self.conv_v_12 = conv2d(in_channels = in_channels//hidden_scale, out_channels = in_channels, kernel_size = 1)
             self.conv_v_22 = conv2d(in_channels = in_channels//hidden_scale, out_channels = in_channels, kernel_size = 1)
+#             if self.bilateral:
+#                 self.conv_v_12 = conv2d(in_channels = in_channels//hidden_scale, out_channels = in_channels, kernel_size = 1)
+            
         
         self.softmax = nn.Softmax(dim = -1)
         
-#         self.conv_o_1 = conv2d(in_channels = in_channels * 2, out_channels = in_channels, kernel_size = 1)
-#         if not by_pass:
+        self.conv_o_1 = conv2d(in_channels = in_channels * 3, out_channels = in_channels, kernel_size = 1)
+        if not by_pass:
+            self.sigma = nn.Parameter(torch.zeros(1))
 #             if self.bilateral:
 #                 self.conv_o_2 = conv2d(in_channels = in_channels * 2, out_channels = in_channels, kernel_size = 1)
 #             else:
 #                 self.sigma = nn.Parameter(torch.zeros(1))
                 
-        self.alpha, self.beta = nn.Parameter(torch.zeros(1)), nn.Parameter(torch.zeros(1))
-        if not by_pass:
-            self.sigma = nn.Parameter(torch.zeros(1))
-            if self.bilateral:
-                self.gamma = nn.Parameter(torch.zeros(1))
+#         self.alpha, self.beta = nn.Parameter(torch.zeros(1)), nn.Parameter(torch.zeros(1))
+#         if not by_pass:
+#             self.sigma = nn.Parameter(torch.zeros(1))
+#             if self.bilateral:
+#                 self.gamma = nn.Parameter(torch.zeros(1))
         
         
     def forward(self, x, y):
@@ -272,38 +275,109 @@ class Cross_Attention(nn.Module):
         f_1 = self.conv_f_1(x).view(bs, -1, H*W)        
         g_1 = self.conv_g_1(x).view(bs, -1, H*W)
         
-        if not self.by_pass:
-            f_2 = self.conv_f_2(y).view(bs, -1, H*W)        
+#         if not self.by_pass:
+        f_2 = self.conv_f_2(y).view(bs, -1, H*W)        
         g_2 = self.conv_g_2(y).view(bs, -1, H*W)
         
         attn_11 = self.softmax(torch.bmm(f_1.permute(0,2,1),g_1))
         attn_21 = self.softmax(torch.bmm(f_2.permute(0,2,1),g_1))
+        attn_12 = self.softmax(torch.bmm(f_1.permute(0,2,1),g_2))
         if not self.by_pass:
             attn_22 = self.softmax(torch.bmm(f_2.permute(0,2,1),g_2))
-            if self.bilateral:
-                attn_12 = self.softmax(torch.bmm(f_1.permute(0,2,1),g_2))
+#             if self.bilateral:
+#                 attn_12 = self.softmax(torch.bmm(f_1.permute(0,2,1),g_2))
         
         h_1 = self.conv_h_1(x).view(bs, -1, H*W)
         h_2 = self.conv_h_2(x).view(bs, -1, H*W)
         
         v_11 = self.conv_v_11(torch.bmm(h_1,attn_11.permute(0,2,1)).view(bs, -1, H, W))        
         v_21 = self.conv_v_21(torch.bmm(h_1,attn_21.permute(0,2,1)).view(bs, -1, H, W))
+        v_12 = self.conv_v_12(torch.bmm(h_2,attn_12.permute(0,2,1)).view(bs, -1, H, W))
         if not self.by_pass:
             v_22 = self.conv_v_22(torch.bmm(h_2,attn_22.permute(0,2,1)).view(bs, -1, H, W))
-            if self.bilateral:
-                v_12 = self.conv_v_12(torch.bmm(h_2,attn_12.permute(0,2,1)).view(bs, -1, H, W))
+#             if self.bilateral:
+#                 v_12 = self.conv_v_12(torch.bmm(h_2,attn_12.permute(0,2,1)).view(bs, -1, H, W))
         
-#         x = x + self.conv_o_1(torch.cat([v_11, v_21], dim = 1))
-        x = x + self.alpha * v_11 + self.beta * v_21
+        x = x + self.conv_o_1(torch.cat([v_11, v_21, v_12], dim = 1))
+#         x = x + self.alpha * v_11 + self.beta * v_21
         if self.by_pass:
             return x
         else:
-#             y = y + (self.conv_o_2(torch.cat([v_12, v_22], dim = 1)) if self.bilateral else self.sigma * v_22)
-            y = y + self.gamma * v_12 + self.sigma * v_22 if self.bilateral else self.sigma * v_22
+            y = y + (self.sigma * v_22)
+#             y = y + self.gamma * v_12 + self.sigma * v_22 if self.bilateral else self.sigma * v_22
             return x, y     
         
+ """
+ original cross attetnion module
+ """
+# class Cross_Attention(nn.Module):
+#     def __init__(self, in_channels, by_pass=False, bilateral = False, hidden_scale = 8, use_sn = True):
+#         super(Cross_Attention, self).__init__()
         
+#         conv2d = snconv2d if use_sn else nn.Conv2d 
         
+#         assert in_channels//hidden_scale > 1
+#         self.by_pass = by_pass
+#         self.bilateral = bilateral
+        
+#         self.conv_f_1 = conv2d(in_channels = in_channels, out_channels = in_channels//hidden_scale, kernel_size = 1)
+#         self.conv_g_1 = conv2d(in_channels = in_channels, out_channels = in_channels//hidden_scale, kernel_size = 1)
+#         self.conv_h_1 = conv2d(in_channels = in_channels, out_channels = in_channels//hidden_scale, kernel_size = 1)
+#         self.conv_v_11 = conv2d(in_channels = in_channels//hidden_scale, out_channels = in_channels, kernel_size = 1)
+#         self.conv_v_12 = conv2d(in_channels = in_channels//hidden_scale, out_channels = in_channels, kernel_size = 1)
+        
+#         if not by_pass:
+#             self.conv_f_2 = conv2d(in_channels = in_channels, out_channels = in_channels//hidden_scale, kernel_size = 1)
+#         self.conv_g_2 = conv2d(in_channels = in_channels, out_channels = in_channels//hidden_scale, kernel_size = 1)
+#         self.conv_h_2 = conv2d(in_channels = in_channels, out_channels = in_channels//hidden_scale, kernel_size = 1)
+#         if not by_pass:
+#             if self.bilateral:
+#                 self.conv_v_21 = conv2d(in_channels = in_channels//hidden_scale, out_channels = in_channels, kernel_size = 1)
+#             self.conv_v_22 = conv2d(in_channels = in_channels//hidden_scale, out_channels = in_channels, kernel_size = 1)
+        
+#         self.softmax = nn.Softmax(dim = -1)
+        
+#         self.conv_o_1 = conv2d(in_channels = in_channels * 2, out_channels = in_channels, kernel_size = 1)
+#         if not by_pass:
+#             if self.bilateral:
+#                 self.conv_o_2 = conv2d(in_channels = in_channels * 2, out_channels = in_channels, kernel_size = 1)
+#             else:
+#                 self.sigma = nn.Parameter(torch.zeros(1))
+        
+#     def forward(self, x, y):
+#         assert x.size() == y.size()
+#         bs, _, H, W = x.size()
+        
+#         f_1 = self.conv_f_1(x).view(bs, -1, H*W)        
+#         g_1 = self.conv_g_1(x).view(bs, -1, H*W)
+        
+#         if not self.by_pass:
+#             f_2 = self.conv_f_2(y).view(bs, -1, H*W)        
+#         g_2 = self.conv_g_2(y).view(bs, -1, H*W)
+        
+#         attn_11 = self.softmax(torch.bmm(f_1.permute(0,2,1),g_1))
+#         attn_12 = self.softmax(torch.bmm(f_1.permute(0,2,1),g_2))
+#         if not self.by_pass:
+#             if self.bilateral:
+#                 attn_21 = self.softmax(torch.bmm(f_2.permute(0,2,1),g_1))
+#             attn_22 = self.softmax(torch.bmm(f_2.permute(0,2,1),g_2))
+        
+#         h_1 = self.conv_h_1(x).view(bs, -1, H*W)
+#         h_2 = self.conv_h_2(x).view(bs, -1, H*W)
+        
+#         v_11 = self.conv_v_11(torch.bmm(h_1,attn_11.permute(0,2,1)).view(bs, -1, H, W))
+#         v_12 = self.conv_v_12(torch.bmm(h_2,attn_12.permute(0,2,1)).view(bs, -1, H, W))
+#         if not self.by_pass:
+#             if self.bilateral:
+#                 v_21 = self.conv_v_21(torch.bmm(h_1,attn_21.permute(0,2,1)).view(bs, -1, H, W))
+#             v_22 = self.conv_v_22(torch.bmm(h_2,attn_22.permute(0,2,1)).view(bs, -1, H, W))
+        
+#         x = x + self.conv_o_1(torch.cat([v_11, v_12], dim = 1))
+#         if self.by_pass:
+#             return x
+#         else:
+#             y = y + (self.conv_o_2(torch.cat([v_21, v_22], dim = 1)) if self.bilateral else self.sigma * v_22) 
+#             return x, y         
         
         
         
