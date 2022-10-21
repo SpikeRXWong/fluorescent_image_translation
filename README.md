@@ -10,24 +10,38 @@ Attention conditional GAN model for bright-field image to fluorescent image tran
 * OpenCV (cv2)
 * Albumentations
 
+## Data
+Dataset processing is presented in [DBcell processing Unit.ipynb](https://github.com/SpikeRXWong/fluorescent_image_translation/blob/main/DBcell%20processing%20Unit.ipynb). One example of training dataset is saved in folder [8_hr_cs2_z_144](https://github.com/SpikeRXWong/fluorescent_image_translation/tree/main/Image/8_hr_cs2_z_144). It contains: bright_field image stach (13 slices), processed fluorescent images (one slice version for and two slice version), nuclei segmentation (mask for two categories). Code for dataset setup in [dbcelldataset.py ](https://github.com/SpikeRXWong/fluorescent_image_translation/blob/main/dbcelldataset.py). [Two ways](https://github.com/SpikeRXWong/fluorescent_image_translation/blob/main/dbcelldataset.py#L151) for slice selection for bright-field image stacks when the input slices are less than 13.
+
 ## Train
-- Code for train the CACGAN model:
+- Code for training the CACGAN 0011 model:
+
 ```bash
-python cacgan_train.py -n epoches --GAP generator_structure --DAL discriminator_structure --out_slice num_output_channels \
--s num_input_channels --down_step num_layers \
---has_mask -lg generator_lr -ld discriminator_lr \
+python cacgan_train.py --GAP 00110 --DAL two --out_slice 2 -s 13 --down_step 5 --has_mask \
 ##--RESUME -c path/to/dir # for continue training
 ```
 
-* Code for performance testing:
+- Code for training the SACGAN 0011 model with single output channel:
 ```bash
-python performance_evaluation.py -sn model_sn --test_path path/to/bright_field_images --Destination path/to/saving_folder -bs batch_size
+python cacgan_train.py --GAP 00110 --DAL two --out_slice 1 -s 13 --down_step 5
 ```
 
-## Data
-Dataset processing is presented in [DBcell processing Unit.ipynb](https://github.com/SpikeRXWong/fluorescent_image_translation/blob/main/DBcell%20processing%20Unit.ipynb). One example of training dataset is saved in folder [8_hr_cs2_z_144](https://github.com/SpikeRXWong/fluorescent_image_translation/tree/main/Image/8_hr_cs2_z_144). It contains: bright_field image stach (13 slices), processed fluorescent images (one slice version for and two slice version), nuclei segmentation (mask for two categories).
+- Code for training the SACGAN 0011 model with two output channels:
+```bash
+python cacgan_train.py --GAP 00110 --DAL two --out_slice 2 -s 13 --down_step 5
+```
 
+- Code for training pix2pix model for comparison
+```bash
+python pix2pix_compare.py -s 13 --out_slice 1
+```
 
+- Code for performance testing:
+```bash
+python performance_evaluation.py -sn model_sn -bs batch_size \
+  --test_path path/to/bright_field_images \
+  --Destination path/to/saving_folder -bs batch_size
+```
 
 ## Result
 
