@@ -32,11 +32,11 @@ Dataset processing is presented in [DBcell processing Unit.ipynb](https://github
 ## Result
 
 * Translation result of CACGAN
-![CACGAN_Result](https://github.com/SpikeRXWong/fluorescent_image_translation/blob/main/Image/cacgan0011_r_5_8_l.png "CACGAN0011")
-Translation result of Cross-Attention cGAN (CACGAN) model with attention module location "0011". __Column (a)__: middle slice of input bright-field image stack; __column (b)__: ground truth fluorescent images, with nuclei false-coloured such that magenta represents healthy nuclei and green represents apoptotic nuclei; __column (c)__: translation result from the model with equivalent false-colouring applied; __column (d)__: the ground truth classification of nuclei, gray represents healthy nuclei and white represents apoptotic nuclei; __column (e)__: the semantic segmentation result by the model; __column (f)__: the MAE error map between the target and generative fluorescent images.
+<img src="Image/cacgan0011_r_5_8_l.png" width="500">
+Translation result of Cross-Attention cGAN (CACGAN) model with attention module location "0011". Column (a): middle slice of input bright-field image stack; column (b): ground truth fluorescent images, with nuclei false-coloured such that magenta represents healthy nuclei and green represents apoptotic nuclei; **column (c)**: translation result from the model with equivalent false-colouring applied; column (d): the ground truth classification of nuclei, gray represents healthy nuclei and white represents apoptotic nuclei; column (e): the semantic segmentation result by the model; column (f): the MAE error map between the target and generative fluorescent images.
 
 * Performance of diffent number of input slice of bright-field images
-![Different_slices](https://github.com/SpikeRXWong/fluorescent_image_translation/blob/main/Image/slicespsnrssim.png "Slices comparation")
+<img src="Image/slicespsnrssim.png" width="500">
 "s" means slice separation remains unchanged, and "d" represent total depth unchanged
 
 
