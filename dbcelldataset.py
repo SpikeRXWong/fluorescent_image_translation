@@ -149,6 +149,7 @@ class DBCImageDataset(Dataset):
         return out
     
     def slice_select(self, x, num):
+        # keep image slack depth unchanged to be 3.6 μm (when slice is 1, select only the middle slice)
         assert num in list(range(1,14))
         ls = []
         if num == 1:
@@ -160,6 +161,7 @@ class DBCImageDataset(Dataset):
                 ls.append(int(round(s)))
                 s += d
         return x[ls, ...]
+        # keep slice separation distance unchanged to be 0.3 μm
         # sta = 6 - num//2
         # end = sta + num 
         # # # x = x[sta : end]
