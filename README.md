@@ -11,7 +11,7 @@ Attention conditional GAN model for bright-field image to fluorescent image tran
 * Albumentations
 
 ## Train
-* Code for train the CACGAN model:
+- Code for train the CACGAN model:
 ```bash
 python cacgan_train.py -n epoches --GAP generator_structure --DAL discriminator_structure --out_slice num_output_channels \
 -s num_input_channels --down_step num_layers \
@@ -31,16 +31,10 @@ Dataset processing is presented in [DBcell processing Unit.ipynb](https://github
 
 ## Result
 
-* Translation result of CACGAN
+### Translation result of CACGAN:
 <img src="Image/cacgan0011_r_5_8_l.png" width="750">
 Translation result of Cross-Attention cGAN (CACGAN) model with attention module location "0011". Column (a): middle slice of input bright-field image stack; column (b): ground truth fluorescent images, with nuclei false-coloured such that magenta represents healthy nuclei and green represents apoptotic nuclei; **column (c)**: translation result from the model with equivalent false-colouring applied; column (d): the ground truth classification of nuclei, gray represents healthy nuclei and white represents apoptotic nuclei; column (e): the semantic segmentation result by the model; column (f): the MAE error map between the target and generative fluorescent images.
 
-* Performance of diffent number of input slice of bright-field images
+### Performance of diffent number of input slice of bright-field images:
 <img src="Image/slicespsnrssim.png" width="500">
 "s" means slice separation remains unchanged, and "d" represent total depth unchanged
-
-
-## Network Architecure
-
-### CACGAN Network
-* [cacgan](https://github.com/SpikeRXWong/fluorescent_image_translation/blob/main/cacgan_network.py)
