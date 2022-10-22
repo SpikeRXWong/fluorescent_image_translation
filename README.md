@@ -1,5 +1,5 @@
-# fluorescent_image_translation
-Attention conditional GAN model for bright-field image to fluorescent image translation
+# Fluorescent image translation
+This is a PyTorch implementation of __Cross-attetnion conditional GAN (CACGAN) model__ for Attention conditional GAN model for bright-field image to fluorescent image translation.
 ---
 
 ## Requiresments:
@@ -46,9 +46,17 @@ python performance_evaluation.py -sn model_sn -bs batch_size \
 ## Result
 
 ### Translation result of CACGAN:
+* Performance of CACGAN model:
+<img src="Image/sample_image/cacgan_table.PNG" width=550>
+* Result of CACGAN 0011 model:
 <img src="Image/sample_image/cacgan0011_r_5_8_l.png" width="750">
-Translation result of Cross-Attention cGAN (CACGAN) model with attention module location "0011". Column (a): middle slice of input bright-field image stack; column (b): ground truth fluorescent images, with nuclei false-coloured such that magenta represents healthy nuclei and green represents apoptotic nuclei; **column (c)**: translation result from the model with equivalent false-colouring applied; column (d): the ground truth classification of nuclei, gray represents healthy nuclei and white represents apoptotic nuclei; column (e): the semantic segmentation result by the model; column (f): the MAE error map between the target and generative fluorescent images.
+  
+  Translation result of Cross-Attention cGAN (CACGAN) model with attention module location "0011". **Column (a)**: middle slice of input bright-field image stack; **column (b)**: ground truth fluorescent images, with nuclei false-coloured such that magenta represents healthy nuclei and green represents apoptotic nuclei; **column (c)**: translation result from the model with equivalent false-colouring applied; **column (d)**: the ground truth classification of nuclei, gray represents healthy nuclei and white represents apoptotic nuclei; **column (e)**: the semantic segmentation result by the model; **column (f)**: the MAE error map between the target and generative fluorescent images.
 
 ### Performance of diffent number of input slice of bright-field images:
-<img src="Image/sample_image/slicespsnrssim.png" width="500">
-"s" means slice separation remains unchanged, and "d" represent total depth unchanged
+<img src="Image/sample_image/slicespsnrssim.png" width=500>
+  
+  "s" means slice separation remains unchanged, and "d" represent total depth unchanged
+
+### Comparision to SACGAN model
+<img src="Image/sample_image/sacgan_table.PNG" width=550>
