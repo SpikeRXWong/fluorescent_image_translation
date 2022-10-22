@@ -47,7 +47,7 @@ python performance_evaluation.py -sn model_sn -bs batch_size \
 
 ### Translation result of CACGAN:
 * Performance of CACGAN model:
-<img src="Image/sample_image/cacgan_table.PNG" width=550>
+<img src="Image/sample_image/cacgan_table.PNG" width=600>
 * Result of CACGAN 0011 model:
 <img src="Image/sample_image/cacgan0011_r_5_8_l.png" width="750">
   
@@ -59,4 +59,4 @@ python performance_evaluation.py -sn model_sn -bs batch_size \
   "s" means slice separation remains unchanged, and "d" represent total depth unchanged
 
 ### Comparision to SACGAN model:
-<img src="Image/sample_image/sacgan_table.PNG" width=500>
+<img src="Image/sample_image/sacgan_table.PNG" width=550>
