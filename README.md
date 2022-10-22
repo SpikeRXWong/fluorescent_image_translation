@@ -58,5 +58,5 @@ python performance_evaluation.py -sn model_sn -bs batch_size \
   
   "s" means slice separation remains unchanged, and "d" represent total depth unchanged
 
-### Comparision to SACGAN model
-<img src="Image/sample_image/sacgan_table.PNG" width=550>
+### Comparision to SACGAN model:
+<img src="Image/sample_image/sacgan_table.PNG" width=500>
