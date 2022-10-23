@@ -56,5 +56,5 @@ Translation result of Cross-Attention cGAN (CACGAN) model with attention module 
 <img src="Image/sample_image/slicespsnrssim.png" width=500>  
 "s" means slice separation remains unchanged, and "d" represent total depth unchanged
 
-### 2. Comparision to SACGAN model:   
+### 3. Comparision to SACGAN model:   
 <img src="Image/sample_image/sacgan_table.PNG" width=550>  
