@@ -1,6 +1,7 @@
 # Fluorescent image translation
 ---
-This is a PyTorch implementation of __Cross-attetnion conditional GAN (CACGAN) model for bright-field image to fluorescent image translation.
+This is a PyTorch implementation of Cross-attetnion conditional GAN (CACGAN) model for bright-field image to fluorescent image translation.
+
 ---
 
 ## Requiresments:
