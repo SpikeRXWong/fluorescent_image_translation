@@ -44,7 +44,7 @@ labels = watershed(-dist_transform, markers, mask=th)
 ```
 
 > Nuclei mask instance segmentation  
-> <img src="../Image/sample_image/ipp2.png" width=250>
+> <img src="../Image/sample_image/ipp2.png" width=350>
 
 We calculate the standard deviation within each individual. And used Otsu threshod method to separate them into two groups. Areas with high standard deviation indicate apoptotic nuclei and the others are healthy nuclei.
 
@@ -80,11 +80,11 @@ label1_sd = np.where(nsd >= threshold_sd)[0] + 1
 label2_sd = np.where(nsd < threshold_sd)[0] + 1
 ```
 > The auto classification result is shown below, and nuclei are labelled with in two colours indicate different healthy state.  
-> <img src="../Image/sample_image/ipp3.png" width=250>
+> <img src="../Image/sample_image/ipp3.png" width=350>
 
 To correct the labelling error, we manually move the wrong items to other group. For example, we move item 13 to the other group. 
 > Final classifcation result:   
-> <img src="../Image/sample_image/ipp4.png" width=250>
+> <img src="../Image/sample_image/ipp4.png" width=350>
 
 Finally, save the segmentation results and used for traininig.
 > Middel slice of Bright-field image stack and target fluorescent image:
