@@ -44,9 +44,9 @@ python cacgan_train.py --GAP 00110 --DAL two --out_slice 2 -s 13 --down_step 5
 python pix2pix_compare.py -s 13 --out_slice 1
 ```
 
-- Code for performance testing:
+- Code for performance testing: 
 ```bash
-python performance_evaluation.py -sn model_sn -bs batch_size \
+python performance_evaluation.py -model_path path/to/pretrained/model -bs batch_size \
   --test_path path/to/bright_field_images \
   --Destination path/to/saving_folder -bs batch_size
 ```
