@@ -1,6 +1,6 @@
 # Fluorescent image translation
 
-This is a PyTorch implementation of the Cross-attention conditional GAN (CAcGAN) model for **Bright-Field to Fluorescence Microscopy Image Translation With Simultaneous Semantic Segmentation**.
+This is a PyTorch implementation of the Cross-attention conditional GAN (XAcGAN) model for **Bright-Field to Fluorescence Microscopy Image Translation With Simultaneous Semantic Segmentation**.
 
 
 ## Requirements:
@@ -16,13 +16,13 @@ Dataset processing is presented in [Raw image dataset pre-proceesing](https://gi
 
 ## Network
 Network architecture for generator and discriminator are implemented in [cacgan_network.py](https://github.com/SpikeRXWong/fluorescent_image_translation/blob/main/cacgan_network.py). Structure of attention module is implemented in [cross_attention_network.py](https://github.com/SpikeRXWong/fluorescent_image_translation/blob/8cf0e9997fd6ab3ce1b77159fd1f84b5d9232c95/cross_attention_network.py).
-1. Generator (CAcGAN 0011):  
+1. Generator (XAcGAN 0011):  
 <img src="Image/sample_image/Gen_network.png" width=300> 
 2. Discriminator:  
 <img src="Image/sample_image/discriminator.png" width=250>
 
 ## Train
-- Code for training the CACGAN 0011 model:
+- Code for training the XACGAN 0011 model:
 
 ```bash
 python cacgan_train.py --GAP 00110 --DAL two --out_slice 2 -s 13 --down_step 5 --has_mask \
