@@ -15,7 +15,7 @@ This is a PyTorch implementation of the Cross-attention conditional GAN (XAcGAN)
 Dataset processing is presented in [Raw image dataset pre-proceesing](https://github.com/SpikeRXWong/fluorescent_image_translation/blob/main/utils/preprocessing.md). One example of the training dataset is saved in folder [8_hr_cs2_z_144](https://github.com/SpikeRXWong/fluorescent_image_translation/tree/main/Image/8_hr_cs2_z_144). It contains bright-field image stach (13 slices), processed fluorescent images (one slice version for and two slice version), nuclei segmentation (mask for two categories). Code for dataset setup in [dbcelldataset.py ](https://github.com/SpikeRXWong/fluorescent_image_translation/blob/main/dbcelldataset.py). [Two ways](https://github.com/SpikeRXWong/fluorescent_image_translation/blob/main/dbcelldataset.py#L151) for slice selection for bright-field image stacks when the input slices are less than 13.
 
 ## Network
-Network architecture for generator and discriminator are implemented in [cacgan_network.py](https://github.com/SpikeRXWong/fluorescent_image_translation/blob/main/cacgan_network.py). Structure of attention module is implemented in [cross_attention_network.py](https://github.com/SpikeRXWong/fluorescent_image_translation/blob/8cf0e9997fd6ab3ce1b77159fd1f84b5d9232c95/cross_attention_network.py).
+Network architecture for generator and discriminator are implemented in [xacgan_network.py](https://github.com/SpikeRXWong/fluorescent_image_translation/blob/main/xacgan_network.py). Structure of attention module is implemented in [cross_attention_network.py](https://github.com/SpikeRXWong/fluorescent_image_translation/blob/8cf0e9997fd6ab3ce1b77159fd1f84b5d9232c95/cross_attention_network.py).
 1. Generator (XAcGAN 0011):  
 <img src="Image/sample_image/Gen_network.png" width=300> 
 2. Discriminator:  
@@ -25,18 +25,18 @@ Network architecture for generator and discriminator are implemented in [cacgan_
 - Code for training the XACGAN 0011 model:
 
 ```bash
-python cacgan_train.py --GAP 00110 --DAL two --out_slice 2 -s 13 --down_step 5 --has_mask \
+python xacgan_train.py --GAP 00110 --DAL two --out_slice 2 -s 13 --down_step 5 --has_mask \
   ##--RESUME -c path/to/dir # for continue training
 ```
 
 - Code for training the SACGAN 0011 model with single output channel:
 ```bash
-python cacgan_train.py --GAP 00110 --DAL two --out_slice 1 -s 13 --down_step 5
+python xacgan_train.py --GAP 00110 --DAL two --out_slice 1 -s 13 --down_step 5
 ```
 
 - Code for training the SACGAN 0011 model with two output channels:
 ```bash
-python cacgan_train.py --GAP 00110 --DAL two --out_slice 2 -s 13 --down_step 5
+python xacgan_train.py --GAP 00110 --DAL two --out_slice 2 -s 13 --down_step 5
 ```
 
 - Code for training pix2pix model for comparison
@@ -54,14 +54,14 @@ python performance_evaluation.py -model_path path/to/pretrained/model -bs batch_
 
 ## Result
 
-### 1. Translation result of CACGAN:  
+### 1. Translation result of XAcGAN:  
 
-1. Performance of CACGAN model:  
+1. Performance of XAcGAN model:  
 <img src="Image/sample_image/cacgan_table.PNG" width=600>  
-2. Result of CACGAN 0011 model:  
+2. Result of XAcGAN 0011 model:  
 <img src="Image/sample_image/cacgan0011_r_5_8_l.png" width="750">  
 
-Translation result of Cross-Attention cGAN (CACGAN) model with attention module location "0011". **Column (a)**: middle slice of input bright-field image stack;   **column (b)**: ground truth fluorescent images, with nuclei false-coloured such that magenta represents healthy nuclei and green represents apoptotic nuclei; **column (c)**: translation result from the model with equivalent false-colouring applied; **column (d)**: the ground truth classification of nuclei, gray represents healthy nuclei and white represents apoptotic nuclei; **column (e)**: the semantic segmentation result by the model; **column (f)**: the MAE error map between the target and generative fluorescent images.  
+Translation result of Cross-Attention cGAN (XAcGAN) model with attention module location "0011". **Column (a)**: middle slice of input bright-field image stack;   **column (b)**: ground truth fluorescent images, with nuclei false-coloured such that magenta represents healthy nuclei and green represents apoptotic nuclei; **column (c)**: translation result from the model with equivalent false-colouring applied; **column (d)**: the ground truth classification of nuclei, gray represents healthy nuclei and white represents apoptotic nuclei; **column (e)**: the semantic segmentation result by the model; **column (f)**: the MAE error map between the target and generative fluorescent images.  
 
 ### 2. Performance of different number of input slice of bright-field images:    
 <img src="Image/sample_image/slicespsnrssim.png" width=500>  

@@ -16,7 +16,7 @@ import torch
 import torch.optim as optim
 from torch.utils.data import DataLoader, Subset
 
-from cacgan_network import Generator, Discriminator
+from xacgan_network import Generator, Discriminator
 from dbcelldataset import DBCImageDataset as ImageDataset
 
 from train_tool_utils import train_one_epoch, eval_one_epoch, save_checkpoint, optimizer2device, save_example_image, save_model, test_model_performance
@@ -52,9 +52,9 @@ def parse_args():
     
     parser.add_argument("-c", "--checkpoint_file", type=str)
     
-    parser.add_argument("--data_path", default="/mnt/storage/scratch/rw17789/DBCellfolder", type=str) 
+    parser.add_argument("--data_path", type=str) 
     
-    parser.add_argument("--Destination", default="/mnt/storage/scratch/rw17789/CACGAN_Result", type=str)
+    parser.add_argument("--Destination", type=str)
     
     parser.add_argument("--down_step", default = 4, type = int, choices=[4, 5])
     
@@ -80,7 +80,7 @@ def parse_args():
     
     parser.add_argument("--Loss_Type", default = "DCGAN", type = str, choices=["DCGAN", "WGAN", "Hinge"])
 
-    parser.add_argument("--test_path", default="/mnt/storage/scratch/rw17789/DBCellfolder_test", type=str) 
+    parser.add_argument("--test_path", type=str) 
     
     return parser.parse_args()
 

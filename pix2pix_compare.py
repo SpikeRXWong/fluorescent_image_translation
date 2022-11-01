@@ -44,9 +44,9 @@ def parse_args():
     
     parser.add_argument("-c", "--checkpoint_file", type=str)
     
-    parser.add_argument("--data_path", default="/mnt/storage/scratch/rw17789/DBCellfolder", type=str) 
+    parser.add_argument("--data_path", type=str) 
     
-    parser.add_argument("--Destination", default="/mnt/storage/scratch/rw17789/CACGAN_Result", type=str)
+    parser.add_argument("--Destination", type=str)
     
     parser.add_argument("--image_size", default = 128, type = int, choices=[128, 256])
     
@@ -66,7 +66,7 @@ def parse_args():
     
     parser.add_argument("--Loss_Type", default = "DCGAN", type = str, choices=["DCGAN", "WGAN", "Hinge"])
 
-    parser.add_argument("--test_path", default="/mnt/storage/scratch/rw17789/DBCellfolder_test", type=str) 
+    parser.add_argument("--test_path", type=str) 
     
     return parser.parse_args()
 

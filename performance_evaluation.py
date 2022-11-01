@@ -2,7 +2,7 @@ import torch
 from torchvision.utils import save_image
 from torch.utils.data import DataLoader
 from dbcelldataset import DBCImageDataset as ImageDataset
-from cacgan_network import Generator
+from xacgan_network import Generator
 from utils import parameter_extractor, compute_psnr, compute_ssim, error_map_func, median_calculater
 
 import os
