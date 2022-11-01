@@ -50,6 +50,7 @@ python performance_evaluation.py -model_path path/to/pretrained/model -bs batch_
   --test_path path/to/bright_field_images \
   --Destination path/to/saving_folder -bs batch_size
 ```
+> Pretrained XAcGAN 0011 model can be downloaded via the [link](https://drive.google.com/file/d/1fdncjtp8rmAD3Sp7WrCplmm6Dw6dt1vM/view?usp=sharing) on GoogleDrive.
 
 ## Result
 
