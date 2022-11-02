@@ -22,19 +22,19 @@ Network architecture for generator and discriminator are implemented in [xacgan_
 <img src="Image/sample_image/discriminator.png" width=250>
 
 ## Train
-- Code for training the XACGAN 0011 model:
+- Code for training the XAcGAN 0011 model:
 
 ```bash
 python xacgan_train.py --GAP 00110 --DAL two --out_slice 2 -s 13 --down_step 5 --has_mask \
   ##--RESUME -c path/to/dir # for continue training
 ```
 
-- Code for training the SACGAN 0011 model with single output channel:
+- Code for training the SAcGAN 0011 model with single output channel:
 ```bash
 python xacgan_train.py --GAP 00110 --DAL two --out_slice 1 -s 13 --down_step 5
 ```
 
-- Code for training the SACGAN 0011 model with two output channels:
+- Code for training the SAcGAN 0011 model with two output channels:
 ```bash
 python xacgan_train.py --GAP 00110 --DAL two --out_slice 2 -s 13 --down_step 5
 ```
