@@ -68,5 +68,5 @@ Translation result of Cross-Attention cGAN (XAcGAN) model with attention module 
 
 "s" means slice separation remains unchanged, and "d" represents total depth unchanged
 
-### 3. Comparison to SACGAN model:   
+### 3. Comparison to SAcGAN model:   
 <img src="Image/sample_image/sacgan_table.PNG" width=550>  
