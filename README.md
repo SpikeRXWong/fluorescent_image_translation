@@ -1,6 +1,7 @@
 # Fluorescent image translation
 
-This is a PyTorch implementation of the Cross-attention conditional GAN (XAcGAN) model for **Bright-Field to Fluorescence Microscopy Image Translation With Simultaneous Semantic Segmentation**.
+This is a PyTorch implementation of the Cross-attention conditional GAN (XAcGAN) model for **Bright-Field to Fluorescence Microscopy Image Translation for Cell Nuclei Health Quantification**.
+URL: https://doi.org/10.1017/S2633903X23000120
 
 
 ## Requirements:
